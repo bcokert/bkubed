@@ -1,0 +1,12 @@
+.DS_Store
+*.swp
+.vagrant
+.idea
+.vscode
+.classpath
+.project
+*.iml
+*.retry
+*~
+
+ansible/roles
