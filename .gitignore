@@ -7,6 +7,10 @@
 .project
 *.iml
 *.retry
+*.plan
 *~
 
 ansible/roles
+.terraform/
+.terraform*
+terraform.tfstate*

@@ -1,0 +1,7 @@
+[production:children]
+production-controllers
+production-workers
+
+[production-workers]
+
+[production-controllers]
