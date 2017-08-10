@@ -18,7 +18,8 @@ variable "ports" {
 }
 
 resource "aws_vpc" "main" {
-  cidr_block = "${var.vpc_cidr}"
+  cidr_block           = "${var.vpc_cidr}"
+  enable_dns_hostnames = true
 
   tags {
     Name = "bkubed-${var.env}"
@@ -72,10 +73,11 @@ resource "aws_security_group" "controller" {
   vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["96.49.75.58/32"] # garbage for now, this is a placeholder sec group
+    # etcd. Assumed to be on the controllers currently
+    from_port = 2379
+    to_port   = 2380
+    protocol  = "tcp"
+    self      = true
   }
 
   tags {
@@ -89,10 +91,10 @@ resource "aws_security_group" "worker" {
   vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["96.49.75.58/32"] # garbage for now, this is a placeholder sec group
+    from_port       = 10255
+    to_port         = 10255
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.controller.id}"]
   }
 
   tags {

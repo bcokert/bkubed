@@ -13,8 +13,17 @@ variable "vpc_subnet_cidrs" {
 
 variable "controller_instance_type" {}
 variable "controller_volume_size" {}
+
+variable "controller_ips" {
+  type = "map"
+}
+
 variable "worker_instance_type" {}
 variable "worker_volume_size" {}
+
+variable "worker_ips" {
+  type = "map"
+}
 
 terraform {
   backend "s3" {
@@ -56,6 +65,7 @@ module "controller_b" {
   ssh_key_name       = "bkubed"
   security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.controller_security_group_id}"]
   volume_size        = "${var.controller_volume_size}"
+  private_ip         = "${var.controller_ips["b"]}"
 }
 
 module "controller_d" {
@@ -68,6 +78,7 @@ module "controller_d" {
   ssh_key_name       = "bkubed"
   security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.controller_security_group_id}"]
   volume_size        = "${var.controller_volume_size}"
+  private_ip         = "${var.controller_ips["d"]}"
 }
 
 module "worker_b" {
@@ -80,6 +91,7 @@ module "worker_b" {
   ssh_key_name       = "bkubed"
   security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.worker_security_group_id}"]
   volume_size        = "${var.worker_volume_size}"
+  private_ip         = "${var.worker_ips["b"]}"
 }
 
 module "worker_d" {
@@ -92,4 +104,5 @@ module "worker_d" {
   ssh_key_name       = "bkubed"
   security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.worker_security_group_id}"]
   volume_size        = "${var.worker_volume_size}"
+  private_ip         = "${var.worker_ips["d"]}"
 }

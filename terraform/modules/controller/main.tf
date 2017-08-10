@@ -2,6 +2,7 @@ variable "env" {}
 variable "ami_id" {}
 variable "instance_type" {}
 variable "subnet_id" {}
+variable "private_ip" {}
 
 variable "ssh_key_name" {
   description = "The name in aws of the keypair to use"
@@ -22,6 +23,7 @@ resource "aws_instance" "controller" {
   vpc_security_group_ids = ["${var.security_group_ids}"]
   subnet_id              = "${var.subnet_id}"
   key_name               = "${var.ssh_key_name}"
+  private_ip             = "${var.private_ip}"
 
   root_block_device {
     volume_type = "gp2"
