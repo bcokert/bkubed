@@ -1,0 +1,51 @@
+---
+- name: create directories
+  file: path={{item}} state=directory
+  with_items:
+  - "{{k8s_certs_dir}}"
+  - "{{k8s_keys_dir}}"
+  - /var/lib/kubelet
+  - /opt/cni/bin
+  - /etc/cni/net.d
+
+- name: copy over cert
+  copy: src=etc/ssl/certs/{{k8s_certs_kubelet}} dest={{k8s_certs_dir}}/{{k8s_certs_kubelet}} mode=600
+
+- name: copy over key
+  copy: src=etc/ssl/keys/{{k8s_keys_kubelet}}.vault dest={{k8s_keys_dir}}/{{k8s_keys_kubelet}} mode=600
+
+- name: create kubeconfig from template
+  template: src=var/lib/kubelet/kubeconfig.tpl dest=/var/lib/kubelet/kubeconfig mode=600
+
+- name: install cni plugin for kubelet
+  get_url:
+    url: https://github.com/containernetworking/cni/releases/download/v{{cni_plugins_version}}/cni-v{{cni_plugins_version}}.tgz
+    dest: /opt/cni/cni.tgz
+
+- name: untar cni plugins
+  unarchive: src=/opt/cni/cni.tgz dest=/opt/cni/bin/ remote_src=yes
+
+- name: download kubelet, kube-proxy, kubectl binaries
+  get_url: url=https://storage.googleapis.com/kubernetes-release/release/v{{k8s_version}}/bin/linux/amd64/{{item}} dest=/usr/bin/{{item}} validate_certs=no mode=0755
+  with_items:
+  - kubectl
+  - kube-proxy
+  - kubelet
+
+- name: create kubelet and kube-proxy systemd unit files from templates
+  template: src=etc/systemd/system/{{item}}.service.tpl dest=/etc/systemd/system/{{item}}.service
+  with_items:
+  - kubelet
+  - kube-proxy
+
+- name: enable kubelet, kube-proxy in systemd
+  systemd: enabled=yes daemon_reload=yes name={{item}}
+  with_items:
+  - kubelet
+  - kube-proxy
+
+- name: restart kubelet, kube-proxy
+  systemd: state=restarted name={{item}}
+  with_items:
+  - kubelet
+  - kube-proxy

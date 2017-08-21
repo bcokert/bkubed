@@ -1,0 +1,8 @@
+---
+
+ubuntu_distribution_name: xenial
+
+docker_apt_key_sig: 58118E89F3A912897C070ADBF76221572C52609D
+docker_apt_key_server: hkp://p80.pool.sks-keyservers.net:80
+
+docker_apt_repository: "deb https://apt.dockerproject.org/repo ubuntu-{{ubuntu_distribution_name}} main"

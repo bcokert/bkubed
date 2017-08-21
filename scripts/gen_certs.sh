@@ -20,7 +20,7 @@ function parse_args {
         [[ ! -x $GETOPT ]] && (echo "you need gnu-getopt (brew)"; exit 1)
     fi
     local PARSED
-    PARSED=$($GETOPT --options d::e:s:: --longoptions certs-dir::env:keysize::dry --name "$0" -- "$@")
+    PARSED=$($GETOPT --options d:e:s: --longoptions certs-dir:env:keysize: --name "$0" -- "$@")
     eval set -- "$PARSED"
 
     while true; do

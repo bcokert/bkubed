@@ -1,0 +1,46 @@
+---
+- name: Create the docker dirs
+  file: path={{item}} state=directory owner=root group=root mode=700
+  with_items:
+  -  /etc/docker
+  -  /var/lib/docker
+
+- name: Create docker config from template
+  template: src=etc/docker/daemon.json.tpl dest=/etc/docker/daemon.json
+  notify: restart docker
+
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Add required apt dependencies to allow https repos
+  apt: name={{ item }} state=present
+  with_items:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - software-properties-common
+
+- name: Add Docker repository key
+  apt_key:
+    id: "{{ docker_apt_key_sig }}"
+    keyserver: "{{docker_apt_key_server}}"
+    state: present
+  register: default_apt_key
+  ignore_errors: True
+
+- name: Add Docker repository and update apt cache
+  apt_repository:
+    repo: "{{ docker_apt_repository }}"
+    update_cache: yes
+    state: present
+
+- name: Install docker engine
+  apt:
+    name: "docker-engine"
+    state: latest
+    force: yes  # to allow downgrades
+    cache_valid_time: 600
+  notify: restart docker
+
+- name: Add ubuntu user to the docker group.
+  user: name=ubuntu groups=docker append=yes

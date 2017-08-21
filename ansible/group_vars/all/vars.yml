@@ -1,0 +1,29 @@
+---
+k8s_certs_dir: /etc/ssl/certs
+k8s_keys_dir: /etc/ssl/keys
+
+k8s_certs_root_ca: root_ca.crt
+k8s_certs_etcd_ca: etcd_ca.crt
+k8s_certs_kube_ca: kube_ca.crt
+
+k8s_certs_etcd_peer: etcd_peer.crt
+k8s_certs_etcd_client: etcd_client.crt
+k8s_certs_api: kube_api.crt
+k8s_certs_kubelet: kubelet.crt
+
+k8s_keys_etcd_peer: etcd_peer.key
+k8s_keys_etcd_client: etcd_client.key
+k8s_keys_api: kube_api.key
+k8s_keys_kubelet: kubelet.key
+
+k8s_version: 1.7.3
+cni_plugins_version: 0.5.2
+
+k8s_cluster_dns_ip: 10.10.0.250
+k8s_cluster_domain: cluster.local
+k8s_cluster_cidr: 10.10.0.0/16
+k8s_service_cluster_ip_range: 10.200.0.0/16
+k8s_service_node_port_range: 30000-32767
+
+# from terraform vars
+k8s_api_server: "https://10.10.0.0"

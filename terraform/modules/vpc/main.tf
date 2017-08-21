@@ -91,6 +91,7 @@ resource "aws_security_group" "worker" {
   vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
+    # ingress from api server
     from_port       = 10255
     to_port         = 10255
     protocol        = "tcp"

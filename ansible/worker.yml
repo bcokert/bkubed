@@ -1,0 +1,12 @@
+---
+- name: worker
+  hosts: worker
+  remote_user: ubuntu
+  become: true
+  become_user: root
+  become_method: sudo
+
+  roles:
+  - role: roles-local/kube-tls-node
+  - role: roles-local/docker-host
+  - role: roles-local/kubelet
