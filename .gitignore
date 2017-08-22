@@ -11,6 +11,7 @@
 *~
 
 ansible/roles
+.generated_certs/
 .terraform/
 .terraform*
 terraform.tfstate*
