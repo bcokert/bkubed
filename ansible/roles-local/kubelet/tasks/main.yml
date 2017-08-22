@@ -9,7 +9,7 @@
   - /etc/cni/net.d
 
 - name: copy over cert
-  copy: src=etc/ssl/certs/{{k8s_certs_kubelet}} dest={{k8s_certs_dir}}/{{k8s_certs_kubelet}} mode=600
+  copy: src=etc/ssl/certs/{{k8s_certs_kubelet}}.vault dest={{k8s_certs_dir}}/{{k8s_certs_kubelet}} mode=600
 
 - name: copy over key
   copy: src=etc/ssl/keys/{{k8s_keys_kubelet}}.vault dest={{k8s_keys_dir}}/{{k8s_keys_kubelet}} mode=600

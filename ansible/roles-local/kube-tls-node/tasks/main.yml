@@ -1,6 +1,7 @@
 ---
 - name: copy over ca certs
-  copy: src=etc/ssl/certs/{{item}} dest={{k8s_certs_dir}}/{{item}} mode=600
+  copy: src=etc/ssl/certs/{{item}}.vault dest={{k8s_certs_dir}}/{{item}} mode=600
   with_items:
   - "{{k8s_certs_root_ca}}"
   - "{{k8s_certs_kube_ca}}"
+  - "{{k8s_certs_etcd_ca}}"
