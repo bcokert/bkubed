@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Config
 clusters:
 - cluster:
-    certificate-authority: {{k8s_certs_dir}}/{{k8s_certs_root_ca}}
+    certificate-authority: {{k8s_certs_dir}}/{{k8s_certs_kube_ca}}
     server: {{k8s_api_server}}
   name: bkubed
 contexts:
@@ -14,4 +14,5 @@ current-context: kubelet
 users:
 - name: kubelet
   user:
-    token: {{k8s_token_kubelet}}
+    client-certificate: {{k8s_certs_dir}}/{{k8s_certs_kubelet}}
+    client-key: {{k8s_keys_dir}}/{{k8s_keys_kubelet}}

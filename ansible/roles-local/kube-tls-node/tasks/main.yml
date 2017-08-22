@@ -1,4 +1,10 @@
 ---
+- name: create directories
+  file: path={{item}} state=directory owner=root group=root
+  with_items:
+  - "{{k8s_certs_dir}}"
+  - "{{k8s_keys_dir}}"
+
 - name: copy over ca certs
   copy: src=etc/ssl/certs/{{item}}.vault dest={{k8s_certs_dir}}/{{item}} mode=600
   with_items:

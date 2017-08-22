@@ -7,6 +7,8 @@ Requires=docker.service
 [Service]
 ExecStart=/usr/bin/kubelet \
   --allow-privileged=true \
+  --anonymous-auth=false \
+  --ca-path {{k8s_certs_dir}}/{{k8s_certs_root_ca}} \
   --cloud-provider=aws \
   --cluster-dns={{k8s_cluster_dns_ip}} \
   --cluster-domain={{k8s_cluster_domain}} \
@@ -19,8 +21,8 @@ ExecStart=/usr/bin/kubelet \
   --serialize-image-pulls=false \
   --register-node=true \
   --require-kubeconfig \
-  --tls-cert-file=/etc/ssl/certs/{{k8s_certs_kubelet}} \
-  --tls-private-key-file=/etc/ssl/keys/{{k8s_keys_kubelet}} \
+  --tls-cert-file={{k8s_certs_dir}}/{{k8s_certs_kubelet}} \
+  --tls-private-key-file={{k8s_keys_dir}}/{{k8s_keys_kubelet}} \
   --v=2
 Restart=on-failure
 RestartSec=5
