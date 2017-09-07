@@ -1,7 +1,9 @@
 [production:children]
-production-controllers
-production-workers
+controller
+worker
 
-[production-workers]
+[worker]
+34.231.91.229
 
-[production-controllers]
+[controller]
+

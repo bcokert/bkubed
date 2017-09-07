@@ -14,8 +14,8 @@ controller_instance_type = "t2.micro"
 controller_volume_size = 8
 
 controller_ips = {
-  b = "10.10.0.0"
-  d = "10.10.128.0"
+  b = "10.10.0.5"
+  d = "10.10.128.5"
 }
 
 worker_instance_type = "t2.micro"
@@ -23,6 +23,6 @@ worker_instance_type = "t2.micro"
 worker_volume_size = 8
 
 worker_ips = {
-  b = "10.10.0.1"
-  d = "10.10.128.1"
+  b = "10.10.1.5"
+  d = "10.10.129.5"
 }

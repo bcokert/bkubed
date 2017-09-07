@@ -12,6 +12,7 @@ ETCD_PEER_NAME="etcd_peer"
 ETCD_CLIENT_NAME="etcd_client"
 KUBE_API_NAME="kube_api"
 KUBELET_NAME="kubelet"
+SERVICE_ACCOUNT_NAME="service_account"
 ADMIN_NAME="admin"
 DEVELOPER_NAME="developer"
 
@@ -95,6 +96,7 @@ Usage: $(basename "$0" [options])
     $ROOT_CA_NAME -> $KUBE_CA_NAME -> $ETCD_CLIENT_NAME
     $ROOT_CA_NAME -> $KUBE_CA_NAME -> $KUBE_API_NAME
     $ROOT_CA_NAME -> $KUBE_CA_NAME -> $KUBELET_NAME
+    $ROOT_CA_NAME -> $KUBE_CA_NAME -> $SERVICE_ACCOUNT_NAME
 
     $ROOT_CA_NAME -> $KUBE_CA_NAME -> $ADMIN_NAME
     $ROOT_CA_NAME -> $KUBE_CA_NAME -> $DEVELOPER_NAME
@@ -146,6 +148,7 @@ function gen_certs {
     openssl genrsa -out ${ETCD_CLIENT_NAME}.key ${KEYSIZE}
     openssl genrsa -out ${KUBE_API_NAME}.key ${KEYSIZE}
     openssl genrsa -out ${KUBELET_NAME}.key ${KEYSIZE}
+    openssl genrsa -out ${SERVICE_ACCOUNT_NAME}.key ${KEYSIZE}
     openssl genrsa -out ${ADMIN_NAME}.key ${KEYSIZE}
     openssl genrsa -out ${DEVELOPER_NAME}.key ${KEYSIZE}
     set +x
@@ -162,6 +165,7 @@ function gen_certs {
     gen_signed_cert ${ETCD_CLIENT_NAME} ${KUBE_CA_NAME}
     gen_signed_cert ${KUBE_API_NAME} ${KUBE_CA_NAME}
     gen_signed_cert ${KUBELET_NAME} ${KUBE_CA_NAME}
+    gen_signed_cert ${SERVICE_ACCOUNT_NAME} ${KUBE_CA_NAME}
 
     info "Creating User certs"
     gen_signed_cert ${ADMIN_NAME} ${KUBE_CA_NAME}
@@ -177,7 +181,7 @@ function gen_certs {
     SSLROOT=${ANSIBLE_DIR}/roles-local/kube-controller/files/etc/ssl
     mkdir -p ${SSLROOT}/certs > /dev/null
     mkdir -p ${SSLROOT}/keys > /dev/null
-    for CERT in ${ETCD_CLIENT_NAME} ${ETCD_PEER_NAME} ${KUBE_API_NAME}; do
+    for CERT in ${ETCD_CLIENT_NAME} ${ETCD_PEER_NAME} ${KUBE_API_NAME} ${SERVICE_ACCOUNT_NAME}; do
       ansible-vault encrypt --vault-password-file ${ANSIBLE_VAULT_PASSWORD_FILE} --output ${SSLROOT}/certs/${CERT}.crt.vault .generated_certs/${ENV}/${CERT}.crt
       ansible-vault encrypt --vault-password-file ${ANSIBLE_VAULT_PASSWORD_FILE} --output ${SSLROOT}/keys/${CERT}.key.vault .generated_certs/${ENV}/${CERT}.key
     done

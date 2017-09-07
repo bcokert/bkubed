@@ -1,0 +1,61 @@
+---
+- name: create directories
+  file: path={{item}} state=directory owner=root group=root
+  with_items:
+  - "{{k8s_certs_dir}}"
+  - "{{k8s_keys_dir}}"
+  - /var/lib/kubernetes
+  - /var/lib/kubelet
+
+- name: copy over certs
+  copy: src=etc/ssl/certs/{{item}}.vault dest={{k8s_certs_dir}}/{{item}} mode=600
+  with_items:
+  - {{k8s_certs_etcd_peer}}
+  - {{k8s_certs_etcd_client}}
+  - {{k8s_certs_api}}
+  - {{k8s_certs_service_account}}
+
+- name: copy over keys
+  copy: src=etc/ssl/keys/{{item}}.vault dest={{k8s_keys_dir}}/{{item}} mode=600
+  with_items:
+  - {{k8s_keys_etcd_peer}}
+  - {{k8s_keys_etcd_client}}
+  - {{k8s_keys_api}}
+  - {{k8s_keys_service_account}}
+
+- name: install kubernetes tokens
+  template: src=var/lib/kubernetes/tokens.csv.tpl dest=/var/lib/kubernetes/tokens.csv mode=0600
+
+- name: install kubernetes authorization policy
+  template: src=var/lib/kubernetes/authorization-policy.jsonl.tpl dest=/var/lib/kubernetes/authorization-policy.jsonl
+
+- name: create kubeconfig for scheduler
+  template: src=var/lib/kube-scheduler/kubeconfig dest=/var/lib/kube-scheduler/kubeconfig mode=0600
+
+- name: copy systemd files for apiserver, controller-manager, scheduler
+  template: src=etc/systemd/system/{{item}}.tpl dest=/etc/systemd/system/{{item}}
+  with_items:
+  - kube-apiserver.service
+  - kube-controller-manager.service
+  - kube-scheduler.service
+
+- name: download kubernetes binaries (apiserver, controller-manager, scheduler)
+  get_url: url=https://storage.googleapis.com/kubernetes-release/release/v{{k8s_version}}/bin/linux/amd64/{{item}} dest=/usr/bin/{{item}} validate_certs=no mode=0755
+  with_items:
+  - kube-apiserver
+  - kube-controller-manager
+  - kube-scheduler
+
+- name: enable apiserver, controller-manager, scheduler
+  systemd: enabled=yes daemon_reload=yes name={{item}}
+  with_items:
+  - kube-apiserver
+  - kube-controller-manager
+  - kube-scheduler
+
+- name: reload apiserver, controller-manager, scheduler
+  systemd: state=restarted name={{item}}
+  with_items:
+  - kube-apiserver
+  - kube-controller-manager
+  - kube-scheduler

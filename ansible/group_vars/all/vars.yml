@@ -10,11 +10,13 @@ k8s_certs_etcd_peer: etcd_peer.crt
 k8s_certs_etcd_client: etcd_client.crt
 k8s_certs_api: kube_api.crt
 k8s_certs_kubelet: kubelet.crt
+k8s_certs_service_account: service_account.crt
 
 k8s_keys_etcd_peer: etcd_peer.key
 k8s_keys_etcd_client: etcd_client.key
 k8s_keys_api: kube_api.key
 k8s_keys_kubelet: kubelet.key
+k8s_keys_service_account: service_account.key
 
 k8s_version: 1.7.3
 cni_plugins_version: 0.5.2

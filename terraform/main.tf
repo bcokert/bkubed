@@ -68,18 +68,18 @@ module "controller_b" {
   private_ip         = "${var.controller_ips["b"]}"
 }
 
-module "controller_d" {
-  source = "./modules/controller"
+# module "controller_d" {
+#   source = "./modules/controller"
 
-  env                = "${var.env}"
-  ami_id             = "ami-cd0f5cb6"
-  instance_type      = "${var.controller_instance_type}"
-  subnet_id          = "${module.vpc.subnet_ids["d"]}"
-  ssh_key_name       = "bkubed"
-  security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.controller_security_group_id}"]
-  volume_size        = "${var.controller_volume_size}"
-  private_ip         = "${var.controller_ips["d"]}"
-}
+#   env                = "${var.env}"
+#   ami_id             = "ami-cd0f5cb6"
+#   instance_type      = "${var.controller_instance_type}"
+#   subnet_id          = "${module.vpc.subnet_ids["d"]}"
+#   ssh_key_name       = "bkubed"
+#   security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.controller_security_group_id}"]
+#   volume_size        = "${var.controller_volume_size}"
+#   private_ip         = "${var.controller_ips["d"]}"
+# }
 
 module "worker_b" {
   source = "./modules/worker"
@@ -94,15 +94,17 @@ module "worker_b" {
   private_ip         = "${var.worker_ips["b"]}"
 }
 
-module "worker_d" {
-  source = "./modules/worker"
+# module "worker_d" {
+#   source = "./modules/worker"
 
-  env                = "${var.env}"
-  ami_id             = "ami-cd0f5cb6"
-  instance_type      = "${var.worker_instance_type}"
-  subnet_id          = "${module.vpc.subnet_ids["d"]}"
-  ssh_key_name       = "bkubed"
-  security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.worker_security_group_id}"]
-  volume_size        = "${var.worker_volume_size}"
-  private_ip         = "${var.worker_ips["d"]}"
-}
+
+#   env                = "${var.env}"
+#   ami_id             = "ami-cd0f5cb6"
+#   instance_type      = "${var.worker_instance_type}"
+#   subnet_id          = "${module.vpc.subnet_ids["d"]}"
+#   ssh_key_name       = "bkubed"
+#   security_group_ids = ["${module.vpc.ssh_security_group_id}", "${module.vpc.worker_security_group_id}"]
+#   volume_size        = "${var.worker_volume_size}"
+#   private_ip         = "${var.worker_ips["d"]}"
+# }
+

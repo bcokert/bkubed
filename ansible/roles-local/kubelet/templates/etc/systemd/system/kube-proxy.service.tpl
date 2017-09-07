@@ -4,7 +4,7 @@ Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 Before=kubelet.service
 
 [Service]
-ExecStart=/usr/bin/kube-proxy --kubeconfig=/var/lib/kubelet/kubeconfig
+ExecStart=/usr/bin/kube-proxy --kubeconfig=/var/lib/kubelet/kubeconfig --v=2
 Restart=on-failure
 RestartSec=5
 

@@ -6,3 +6,7 @@ docker_apt_key_sig: 58118E89F3A912897C070ADBF76221572C52609D
 docker_apt_key_server: hkp://p80.pool.sks-keyservers.net:80
 
 docker_apt_repository: "deb https://apt.dockerproject.org/repo ubuntu-{{ubuntu_distribution_name}} main"
+
+k8s_cluster_name: bkubed.production
+
+etcd_servers: http://10.10.0.0:2379,http://10.10.128.0:2379
